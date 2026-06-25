@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="Kikiriya DevOps by Andres">
-    <meta name="description" content="Juega a la Ruleta de Casino Premium. Modo Multijugador hasta 8 personas simultáneas. Gira la ruleta táctil y descubre quién gana.">
-    <meta name="keywords" content="ruleta, casino, juego móvil, multijugador, 8 jugadores, suerte, ganar, Kikiriya DevOps">
+    <meta name="description" content="Ruleta Europea. Apuesta con fichas, múltiples jugadores, paga 36x.">
     <meta name="theme-color" content="#121212" id="theme-color-meta">
-    
-    <title>🎲 Ruleta de Casino Premium</title>
-
+  <meta name="language" content="Spanish">  
+  
+    <title>🎲 Rula</title>	
+  <link rel="icon" type="rula.png" href="./imgs/Transporte6.png">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Rula de verdad">
+  <meta property="og:title" content="Juga con los que saben!">
+  <meta property="og:description" content="Rula de verdad!">
+  <meta property="og:url" content="https://rulaesunafija.netlify.app/">
+  <meta property="og:image" content="https://rulaesunafija.netlify.app/rula.png">
+  <meta property="og:image:secure_url" content="https://rulaesunafija.netlify.app/rula.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="rula europea">
+  <meta property="og:locale" content="es_UY">
+  <meta property="og:locale:alternate" content="es_ES">
+	
     <style>
-        /* Variables CSS para Temas */
         :root {
             --bg-color: #121212;
             --surface-color: #1e1e1e;
@@ -23,9 +37,9 @@
             --shadow: 0 8px 25px rgba(0,0,0,0.6);
             --border-radius: 12px;
             --ruleta-border: #37474f;
-            --input-bg: #2a2a2a;
+            --felt-color: #0d6b3a;
+            --felt-dark: #0a522c;
         }
-
         [data-theme="light"] {
             --bg-color: #f4f6f8;
             --surface-color: #ffffff;
@@ -35,473 +49,714 @@
             --accent-color: #d50000;
             --shadow: 0 8px 25px rgba(0,0,0,0.15);
             --ruleta-border: #cfd8dc;
-            --input-bg: #eeeeee;
+            --felt-color: #1a7a3e;
+            --felt-dark: #146633;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.4s ease, color 0.4s ease;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            transition: background 0.4s ease, color 0.4s ease;
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column;
+            touch-action: manipulation;
         }
-
-        /* Botón discreto para el tema */
-        .theme-toggle {
-            top: clamp(10px, 2.5vw, 15px);
-            right: clamp(10px, 2.5vw, 15px);
-            background: var(--surface-color);
-            border: 1px solid var(--text-muted);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: clamp(0.75rem, 2.2vw, 0.9rem);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        /* Mobile First Layout */
         .ruleta-section {
+            display: flex; flex-direction: column; align-items: center;
+            padding: clamp(6px, 1.2vh, 12px) clamp(8px, 3vw, 16px);
+            gap: clamp(6px, 1.2vh, 10px);
+            flex: 1;
+            max-width: 560px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%;
+        }
+        .top-bar h1 {
+            font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .theme-toggle {
+            background: var(--surface-color); border: 1px solid var(--text-muted);
+            color: var(--text-color); padding: 5px 10px; border-radius: 20px;
+            cursor: pointer; font-size: clamp(0.7rem, 2vw, 0.85rem);
+            box-shadow: var(--shadow); transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+			/* ficahs BAR */
+		.counter-bar{display: flex; align-items: center; justify-content: space-between;width: 100%; gap: 8px;}
+        
+        .balance-bar {
+            display: flex; 			
+			flex-direction: column;
+			align-items: center; 
+			justify-content: center; 
+			gap: 8px;
+            width: 100%; 
+			padding: 4px 0;
+            font-size: clamp(1rem, 4vw, 1.3rem); font-weight: bold;
+            padding: 2px 0;
+        }		
+        .balance-bar .label { color: var(--text-muted); font-weight: normal; }
+        .balance-bar .amount { color: var(--gold-color); }
+
+        .chip-warning {
+            color: var(--accent-color); font-size: clamp(0.75rem, 3vw, 0.9rem);
+            animation: pulse-warn 1s infinite alternate;
+        }
+        @keyframes pulse-warn { from { opacity: 0.5; } to { opacity: 1; } }
+
+        /* DENOMINATION */
+        .denom-bar {
+            display: flex; gap: 6px; width: 100%;
+            justify-content: center;
+        }
+        .denom-btn {
+            flex: 1; max-width: 70px;
+            padding: 8px 0; border: 2px solid var(--text-muted);
+            border-radius: 8px; background: var(--surface-color);
+            color: var(--text-color); font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: bold; cursor: pointer;
+            transition: all 0.2s ease; touch-action: manipulation;
+        }
+        .denom-btn.active {
+            border-color: var(--gold-color);
+            background: rgba(255,215,0,0.15);
+            color: var(--gold-color);
+            box-shadow: 0 0 12px rgba(255,215,0,0.3);
+        }
+        .denom-btn:active { transform: scale(0.93); }
+
+        /* PLAYER TABS */
+        .player-tabs {
+            display: flex; gap: 4px; width: 100%;
+            overflow-x: auto; -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; padding: 2px 0;
+        }
+        .player-tabs::-webkit-scrollbar { display: none; }
+        .player-tab {
+            flex: 0 0 auto; padding: 6px 10px;
+            border-radius: 8px; border: 2px solid transparent;
+            background: var(--surface-color); cursor: pointer;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem); font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            min-width: 52px; transition: all 0.2s ease;
+            touch-action: manipulation;
+            color: var(--text-color);
+            position: relative;
+        }
+        .player-tab .tab-name {
+            font-size: clamp(0.65rem, 2.2vw, 0.75rem);
+        }
+        .player-tab .tab-balance {
+            font-size: clamp(0.6rem, 2vw, 0.7rem);
+            opacity: 0.8;
+        }
+        .player-tab .tab-color-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            display: inline-block;
+        }
+        .player-tab.active {
+            border-color: var(--gold-color);
+            background: rgba(255,215,0,0.1);
+        }
+        .player-tab.active::after {
+            content: '👈'; font-size: 0.6rem;
+            position: absolute; top: -4px; right: -4px;
+        }
+        .player-tab:active { transform: scale(0.95); }
+        .tab-clear {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent-color);
+            color: #fff;
+            font-size: 10px;
+            line-height: 1;
+            cursor: pointer;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: clamp(.2rem, 2vh, .5rem) clamp(.2rem, 3vw, 1.2rem);
-            flex: 1;
+            padding: 0;
+            touch-action: manipulation;
+            z-index: 5;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            transition: transform 0.15s;
         }
-
-        h1 {
-            margin-top: clamp(.8rem, 4vh, 1rem);
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: clamp(1.3rem, 5.5vw, 2rem);
-            text-align: center;
+        .tab-clear:active { transform: scale(0.85); }
+        .tab-bet-info {
+            font-size: clamp(0.5rem, 1.8vw, 0.6rem);
+            color: var(--gold-color);
         }
-
-        .apuestas-wrapper {
-            background: var(--surface-color);
-			padding: clamp(.6rem, 2.5vw, 1rem);
-			border-radius: var(--border-radius);
-			box-shadow: var(--shadow);
-			border-top: 3px solid var(--primary-color);
-			width: 100%;
-			max-width: 500px;
-			margin: clamp(.5rem, 2.5vh, 1rem) 0;
-			transition: background 0.4s ease;
+        .tab-buy {
+            font-size: clamp(0.55rem, 1.8vw, 0.65rem);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0,230,118,0.15);
+            color: var(--primary-color);
+            cursor: pointer;
+            touch-action: manipulation;
+            margin-top: 2px;
         }
+        .tab-buy:active { transform: scale(0.93); }
 
-        .apuestas-titulo {
-            text-align: center;
-            font-size: clamp(0.8rem, 3vw, 0.95rem);
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .apuestas-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        @media (min-width: 480px) {
-            .apuestas-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .jugador-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: var(--input-bg);
-            padding: 6px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .jugador-box:focus-within {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
-        }
-
-        .jugador-box label {
-            font-size: clamp(0.7rem, 2.8vw, 0.85rem);
-            margin-bottom: 3px;
-            font-weight: normal;
-        }
-
-        .input-elegante {
+        /* BETTING GRID */
+        .betting-grid-wrapper {
             width: 100%;
-            max-width: 70px;
-            height: clamp(1em, 7vw, 1.2em);
-            font-size: clamp(1.1rem, 3.8vw, 1.4rem);
-            text-align: center;
-            font-weight: bold;
-            color: var(--text-color);
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid var(--text-muted);
-            outline: none;
-            transition: border-color 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto; -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            touch-action: pan-y;
         }
+        .betting-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 40px repeat(12, 42px);
+            gap: 2px;
+            background: var(--felt-color);
+            padding: 3px;
+            border-radius: 8px;
+            border: 2px solid var(--felt-dark);
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .grid-cell {
+            display: flex; align-items: center; justify-content: center;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem); font-weight: bold;
+            color: #fff; border-radius: 3px; cursor: pointer;
+            position: relative; touch-action: manipulation;
+            transition: transform 0.1s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .grid-cell:active { transform: scale(0.92); }
+        .grid-cell.red { background: #c62828; }
+        .grid-cell.black { background: #212121; }
+        .grid-cell.zero {
+            background: #2e7d32;
+            grid-column: 1 / 4;
+            grid-row: 1;
+            font-size: clamp(0.85rem, 3vw, 1rem);
+        }
+        .chips-stack {
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 2;
+            line-height: 1;
+        }
+        .chip-stacked {
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.5rem; font-weight: bold;
+            color: #000000;
+            border: 1.5px solid rgba(255,255,255,0.7);
+            margin-left: -5px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .chip-stacked:first-child { margin-left: 0; }
+        .chip-stacked.multi { font-size: 0.45rem; font-weight: bold; }
 
-        .input-elegante:focus {
-            border-bottom-color: var(--primary-color);
+        /* CONTROLS */
+        .controls {
+            display: flex; gap: 8px; width: 100%;
+            justify-content: center;
         }
+        .btn-spin, .btn-clear {
+            flex: 1; max-width: 180px;
+            padding: 4px 0; border: none; border-radius: 10px;
+            font-size: clamp(.5rem, 4vw, 1rem); font-weight: inherit;
+            cursor: pointer; touch-action: manipulation;
+            transition: all 0.2s ease;
+        }
+        .btn-spin {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            color: #000; box-shadow: 0 4px 15px rgba(0,230,118,0.3);
+        }
+        .btn-spin:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(0,230,118,0.2); }
+        .btn-spin:disabled { opacity: 0.5; transform: none; }
+        .btn-clear {
+            background: var(--surface-color); color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+        }
+        .btn-clear:active { transform: scale(0.95); }
 
-        /* Ocultar flechas nativas de inputs numéricos */
-        .input-elegante::-webkit-outer-spin-button,
-        .input-elegante::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        .input-elegante[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* Ruleta Canvas */
+        /* WHEEL */
         .ruleta-container {
             position: relative;
-            width: clamp(250px, 80vw, 380px);
+            width: clamp(220px, 65vw, 340px);
             aspect-ratio: 1 / 1;
-            margin: clamp(5px, 1.5vh, 12px) 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .marcador {
-            position: absolute;
-            top: -10px;
-            z-index: 10;
-            width: 0;
-            height: 0;
-            border-left: clamp(8px, 2.5vw, 12px) solid transparent;
-            border-right: clamp(8px, 2.5vw, 12px) solid transparent;
-            border-top: clamp(18px, 5vw, 24px) solid var(--gold-color);
-            filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.6));
+            position: absolute; top: -8px; z-index: 10;
+            width: 0; height: 0;
+            border-left: clamp(4px, 2.5vw, 8px) solid transparent;
+            border-right: clamp(4px, 2.5vw, 8px) solid transparent;
+            border-top: clamp(1rem, 5vw, 1.5rem) solid var(--gold-color);
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6));
         }
-
         canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            box-shadow: var(--shadow);
-            cursor: pointer;
+            width: 100%; height: 100%; border-radius: 50%;
+            box-shadow: var(--shadow); cursor: pointer;
             transition: transform 0.1s;
         }
+        canvas:active { transform: scale(0.97); }
 
-        canvas:active {
-            transform: scale(0.97);
-        }
-
+        /* RESULT */
         .resultado-texto {
-            margin-top: clamp(8px, 1.5vh, 15px);
-            font-weight: bold;
-            min-height: 55px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            line-height: 1.3;
+            font-weight: bold; min-height: 50px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; line-height: 1.3;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            padding: 4px 0;
         }
-
-        .resultado-numero {
-            color: var(--text-color);
-            font-size: 1em;
-            margin-bottom: 2px;
-        }
-
-        .efecto-ganador {
-            animation: victoria 0.8s infinite alternate ease-in-out;
-            color: var(--primary-color);
-        }
-
-        .efecto-perdedor {
-            animation: temblor 0.5s ease-in-out;
-            color: var(--accent-color);
-        }
+        .resultado-numero { font-size: 1.1em; margin-bottom: 2px; }
+        .efecto-ganador { animation: victoria 0.8s infinite alternate ease-in-out; color: var(--primary-color); }
+        .efecto-perdedor { animation: temblor 0.5s ease-in-out; color: var(--accent-color); }
 
         @keyframes victoria {
             0% { transform: scale(1); text-shadow: 0 0 8px var(--primary-color); }
             100% { transform: scale(1.08); text-shadow: 0 0 18px var(--gold-color); color: var(--gold-color); }
         }
-
         @keyframes temblor {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+            0%,100% { transform: translateX(0); }
+            20%,60% { transform: translateX(-5px); }
+            40%,80% { transform: translateX(5px); }
         }
 
+        /* BETS SUMMARY */
+        .bets-summary {
+            width: 100%; padding: 6px 10px;
+            background: var(--surface-color); border-radius: 8px;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            text-align: center; min-height: 28px;
+        }
+        .bets-summary .title { color: var(--text-muted); margin-bottom: 4px; font-weight: bold; }
+        .bets-summary .content { color: var(--text-color); }
+        .bets-summary .player-bet { display: inline-block; margin: 0 3px; }
+
+        /* HISTORY */
         .historial-container {
-            margin-top: clamp(.5rem, 1.5vh, 1rem);
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
+            width: 100%; text-align: center;
         }
-
         .historial-title {
-            font-size: clamp(0.75rem, 2.3vw, 0.85rem);
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-            font-weight: bold;
+            font-size: clamp(0.7rem, 2.3vw, 0.8rem);
+            color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 6px; letter-spacing: 2px; font-weight: bold;
         }
-        
         .historial-lista {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap; /* Permite saltar de línea limpiamente para acumular los 20 números */
-            min-height: 75px; 
-            padding: 0 5px;
+            display: flex; justify-content: center; gap: 4px;
+            flex-wrap: wrap; min-height: 60px; padding: 0 4px;
         }
-
         .historial-item {
-            width: clamp(28px, 7vw, 34px);
-            height: clamp(28px, 7vw, 34px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-            color: white;
-            border: 1.5px solid rgba(255,255,255,0.25);
+            width: clamp(24px, 6vw, 30px); height: clamp(24px, 6vw, 30px);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: bold;
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            color: white; border: 1.5px solid rgba(255,255,255,0.25);
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            animation: aparecer 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: aparecer 0.4s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
         }
-
         @keyframes aparecer {
             from { transform: scale(0) rotate(-90deg); opacity: 0; }
             to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* INSUFFICIENT FLASH */
+        .insufficient {
+            animation: flash-red 0.5s ease 2;
+        }
+        @keyframes flash-red {
+            0%,100% { border-color: transparent; }
+            50% { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(255,23,68,0.5); }
+        }
+
+        @media (min-width: 480px) {
+            .betting-grid {
+                grid-template-rows: 46px repeat(12, 48px);
+            }
+            .chip-stacked { width: 20px; height: 20px; font-size: 0.55rem; margin-left: -6px; }
+            .player-tab { padding: 8px 14px; min-width: 60px; }
         }
     </style>
 </head>
 <body>
     <section class="ruleta-section">
-        <h1>Es una fija 🎲</h1>
-        
-        <div class="apuestas-wrapper">
-            <div class="apuestas-titulo">Predicciones (0-36)</div>
-            <div class="apuestas-grid">
-                <div class="jugador-box"><label style="color: #ff5252;">J1</label><input type="number" id="apuestaJ1" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #448aff;">J2</label><input type="number" id="apuestaJ2" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #69f0ae;">J3</label><input type="number" id="apuestaJ3" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #ffd740;">J4</label><input type="number" id="apuestaJ4" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #e040fb;">J5</label><input type="number" id="apuestaJ5" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #00e5ff;">J6</label><input type="number" id="apuestaJ6" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #ff9100;">J7</label><input type="number" id="apuestaJ7" class="input-elegante" min="0" max="36" placeholder="-"></div>
-                <div class="jugador-box"><label style="color: #b2ff59;">J8</label><input type="number" id="apuestaJ8" class="input-elegante" min="0" max="36" placeholder="-"></div>
-            </div>
+        <div class="top-bar">
+            <h1>🎲 Es una fija</h1>
+            <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">Tema ☀️</button>
         </div>
 
+        <div class="betting-grid-wrapper">
+            <div class="betting-grid" id="bettingGrid"></div>
+        </div>
+		
+        <div class="counter-bar">
+			<div class="balance-bar">
+				<span class="label">Apostado: </span>
+				<span id="totalBetDisplay" class="amount">J1: 0</span>
+			</div>
+			
+        <div class="resultado-texto" id="resultText">
+            <span>Toca GIRAR o la ruleta</span>
+        </div>
+			<div class="balance-bar" id="balanceBar">
+				<span class="label">Fichas:</span>
+				<span class="amount" id="balanceDisplay">50</span>
+				<span class="chip-warning" id="chipWarning" style="display:none">⚠️ Quedan pocas</span>
+			</div>
+        </div>
+		
         <div class="ruleta-container">
             <div class="marcador"></div>
-            <canvas id="wheelCanvas" width="600" height="600" title="¡Haz clic para girar!"></canvas>
+            <canvas id="wheelCanvas" width="600" height="600" title="Toca para girar"></canvas>
         </div>
 
-        <div class="resultado-texto" id="resultText">
-            <span>Haz clic en la ruleta para girar</span>
+        <div class="controls">
+            <button id="spinBtn" class="btn-spin">🎯 GIRAR</button>
+            <button id="clearBtn" class="btn-clear">🗑 LIMPIAR</button>
         </div>
-
+		
         <div class="historial-container">
             <div class="historial-title">Últimos 20 Resultados</div>
             <div class="historial-lista" id="historyList"></div>
         </div>
+
+        <div class="bets-summary" id="betsSummary">
+            <div class="title">Apuestas activas</div>
+            <div class="content" id="betsSummaryContent">Nadie ha apostado aún</div>
+        </div>
 		
-		<button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">Tema ☀️</button>
-	
+        <div class="denom-bar" id="denomBar">
+            <button class="denom-btn active" data-value="1">×1</button>
+            <button class="denom-btn" data-value="5">×5</button>
+            <button class="denom-btn" data-value="10">×10</button>
+            <button class="denom-btn" data-value="25">×25</button>
+        </div>
+
+        <div class="player-tabs" id="playerTabs"></div>
+
     </section>
 
     <script>
     (function() {
         'use strict';
 
-        // 1. Configuración de Tema Claro/Oscuro
-        const themeToggle = document.getElementById('themeToggle');
-        const themeMeta = document.getElementById('theme-color-meta');
-        let isDarkTheme = true;
+        // ==================== CONFIG ====================
+        const ORDEN_EUROPEO = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+        const ROJOS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+        const COLORES_JUG = {J1:'#00e5ff',J2:'#ff9100',J3:'#69f0ae',J4:'#ffd740',J5:'#e040fb',J6:'#ff5252',J7:'#448aff',J8:'#b2ff59'};
+        const NOMS_JUG = ['J1','J2','J3','J4','J5','J6','J7','J8'];
+        const TABLERO = [
+            [1,2,3], [4,5,6], [7,8,9], [10,11,12],
+            [13,14,15], [16,17,18], [19,20,21], [22,23,24],
+            [25,26,27], [28,29,30], [31,32,33], [34,35,36]
+        ];
+        const DENOMS = [1,5,10,25];
 
-        themeToggle.addEventListener('click', () => {
-            isDarkTheme = !isDarkTheme;
-            if (!isDarkTheme) {
-                document.body.setAttribute('data-theme', 'light');
-                themeToggle.textContent = 'Tema 🌙';
-                themeMeta.setAttribute('content', '#f4f6f8');
-            } else {
-                document.body.removeAttribute('data-theme');
-                themeToggle.textContent = 'Tema ☀️';
-                themeMeta.setAttribute('content', '#121212');
-            }
-            dibujarRuleta();
-        });
-
-        // 2. Datos Estáticos de la Ruleta (0-36)
-        const opciones = [];
-        opciones.push({ texto: "0", color: "#2e7d32" }); // Verde Casino
-
-        for (let i = 1; i <= 36; i++) {
-            let colorSegmento = (i % 2 === 0) ? "#212121" : "#d50000";
-            opciones.push({ texto: i.toString(), color: colorSegmento });
-        }
-
-        const numSegmentos = opciones.length;
-        const angularSize = (2 * Math.PI) / numSegmentos;
-        
+        // ==================== STATE ====================
+        let players = {};
+        NOMS_JUG.forEach(n => { players[n] = { balance: 50, bets: {}, pedidos: 0, insolvente: false }; });
+        let activePlayer = 'J1';
+        let selectedDenom = 1;
         let canvas, ctx, resultText, historyList;
-        let apuestasInputs = [];
         let currentRotation = 0;
         let estaGirando = false;
         let audioCtx = null;
 
-        // 3. Control de Motor de Audio Web API
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // ==================== THEME ====================
+        const themeToggle = document.getElementById('themeToggle');
+        const themeMeta = document.getElementById('theme-color-meta');
+        let isDarkTheme = true;
+        themeToggle.addEventListener('click', () => {
+            isDarkTheme = !isDarkTheme;
+            if (!isDarkTheme) {
+                document.body.setAttribute('data-theme','light');
+                themeToggle.textContent = 'Tema 🌙';
+                themeMeta.setAttribute('content','#f4f6f8');
+            } else {
+                document.body.removeAttribute('data-theme');
+                themeToggle.textContent = 'Tema ☀️';
+                themeMeta.setAttribute('content','#121212');
             }
+            dibujarRuleta();
+        });
+
+        // ==================== WHEEL DATA ====================
+        const opciones = ORDEN_EUROPEO.map(n => ({
+            texto: n.toString(),
+            color: n === 0 ? '#2e7d32' : (ROJOS.includes(n) ? '#c62828' : '#212121')
+        }));
+        const numSegmentos = opciones.length;
+        const angularSize = (2 * Math.PI) / numSegmentos;
+
+        // ==================== AUDIO ====================
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
         }
-
         function emitirSonidoClic() {
             try {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle'; 
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'triangle';
                 osc.frequency.setValueAtTime(150, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
                 gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
-            } catch (e) {}
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
         }
-
         function emitirSonidoVictoria() {
             try {
                 if (!audioCtx) return;
-                const notas = [523.25, 659.25, 783.99, 1046.50];
-                notas.forEach((freq, index) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
+                [523.25,659.25,783.99,1046.50].forEach((freq,i) => {
+                    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (index * 0.08));
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime + (index * 0.08));
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (index * 0.08) + 0.4);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime + (index * 0.08));
-                    osc.stop(audioCtx.currentTime + (index * 0.08) + 0.4);
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i*0.08);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime + i*0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i*0.08 + 0.4);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + i*0.08);
+                    osc.stop(audioCtx.currentTime + i*0.08 + 0.4);
                 });
             } catch(e) {}
         }
+        function emitirSonidoFicha() {
+            try {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.06);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.06);
+            } catch(e) {}
+        }
 
-        // 4. Renderizado de la Ruleta en Canvas
+        // ==================== CANVAS ====================
         function dibujarRuleta() {
-            const centro = canvas.width / 2;
-            const radio = centro - 15;
+            const centro = canvas.width / 2, radio = centro - 15;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--ruleta-border').trim() || "#37474f";
-
+            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--ruleta-border').trim() || '#37474f';
             opciones.forEach((opcion, i) => {
-                const anguloInicio = i * angularSize;
-                const anguloFin = anguloInicio + angularSize;
-
-                ctx.beginPath();
-                ctx.moveTo(centro, centro);
-                ctx.arc(centro, centro, radio, anguloInicio, anguloFin);
-                ctx.fillStyle = opcion.color;
-                ctx.fill();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = strokeColor;
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(centro, centro);
-                ctx.rotate(anguloInicio + angularSize / 2);
-                ctx.textAlign = "right";
-                ctx.textBaseline = "middle";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 19px sans-serif"; 
+                const aInicio = i * angularSize, aFin = aInicio + angularSize;
+                ctx.beginPath(); ctx.moveTo(centro, centro);
+                ctx.arc(centro, centro, radio, aInicio, aFin);
+                ctx.fillStyle = opcion.color; ctx.fill();
+                ctx.lineWidth = 1.5; ctx.strokeStyle = strokeColor; ctx.stroke();
+                ctx.save(); ctx.translate(centro, centro);
+                ctx.rotate(aInicio + angularSize / 2);
+                ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 19px sans-serif';
                 ctx.fillText(opcion.texto, radio - 20, 0);
                 ctx.restore();
             });
-
-            const centerColor = isDarkTheme ? "#111111" : "#e0e0e0";
-            ctx.beginPath();
-            ctx.arc(centro, centro, 45, 0, 2 * Math.PI);
-            ctx.fillStyle = centerColor;
-            ctx.fill();
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = "#ffd700";
-            ctx.stroke();
+            const centerColor = isDarkTheme ? '#111111' : '#e0e0e0';
+            ctx.beginPath(); ctx.arc(centro, centro, 45, 0, 2 * Math.PI);
+            ctx.fillStyle = centerColor; ctx.fill();
+            ctx.lineWidth = 4; ctx.strokeStyle = '#ffd700'; ctx.stroke();
         }
 
-        // 5. Animación y Control de Lógica
+        // ==================== BETTING GRID ====================
+        function crearTablero() {
+            const grid = document.getElementById('bettingGrid');
+            grid.innerHTML = '';
+            // Zero (top, spans 3 columns)
+            const zero = document.createElement('div');
+            zero.className = 'grid-cell zero';
+            zero.dataset.number = '0';
+            zero.textContent = '0';
+            zero.style.gridColumn = '1 / 4';
+            zero.style.gridRow = '1';
+            zero.addEventListener('click', () => colocarFicha(0));
+            grid.appendChild(zero);
+            // Numbers (3 columns vertical: 1-12, 13-24, 25-36)
+            TABLERO.forEach((row, ri) => {
+                row.forEach((num, ci) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell ' + (ROJOS.includes(num) ? 'red' : 'black');
+                    cell.dataset.number = num.toString();
+                    cell.textContent = num;
+                    cell.style.gridColumn = (ci + 1).toString();
+                    cell.style.gridRow = (ri + 2).toString();
+                    cell.addEventListener('click', () => colocarFicha(num));
+                    grid.appendChild(cell);
+                });
+            });
+        }
+
+        function actualizarTablero() {
+            const cells = document.querySelectorAll('.grid-cell');
+            cells.forEach(cell => {
+                const old = cell.querySelector('.chips-stack');
+                if (old) old.remove();
+                const num = parseInt(cell.dataset.number);
+                const stack = document.createElement('div');
+                stack.className = 'chips-stack';
+                let zIdx = 0;
+                NOMS_JUG.forEach(n => {
+                    const count = players[n].bets[num];
+                    if (count && count > 0) {
+                        const chip = document.createElement('div');
+                        chip.className = 'chip-stacked' + (count > 9 ? ' multi' : '');
+                        chip.style.background = COLORES_JUG[n];
+                        chip.style.zIndex = zIdx;
+                        chip.textContent = count > 99 ? '99+' : count;
+                        stack.appendChild(chip);
+                        zIdx++;
+                    }
+                });
+                if (zIdx > 0) cell.appendChild(stack);
+            });
+        }
+
+        // ==================== PLAYER TABS ====================
+        function crearPestanas() {
+            const container = document.getElementById('playerTabs');
+            container.innerHTML = '';
+            NOMS_JUG.forEach(n => {
+                const tab = document.createElement('button');
+                tab.className = 'player-tab' + (n === activePlayer ? ' active' : '');
+                tab.dataset.player = n;
+                tab.style.setProperty('--player-color', COLORES_JUG[n]);
+                const hasBets = Object.keys(players[n].bets).length > 0;
+                tab.innerHTML = `
+                    <span class="tab-name"><span class="tab-color-dot" style="background:${COLORES_JUG[n]}"></span> ${n}</span>
+                    <span class="tab-balance" id="tabBal_${n}">${players[n].balance}</span>
+                    <span class="tab-bet-info" id="tabBetInfo_${n}" style="display:none">Ap: 0 | Sal: ${players[n].balance}</span>
+                    <button class="tab-clear" id="clearBtn_${n}" data-player="${n}" style="display:${hasBets ? 'flex' : 'none'}" aria-label="Limpiar ${n}">✕</button>
+                    <button class="tab-buy" id="buyBtn_${n}" data-player="${n}" style="display:none">+50💰(×0)</button>
+                `;
+                tab.addEventListener('click', (e) => {
+                    if (e.target.closest('.tab-clear')) return;
+                    if (e.target.closest('.tab-buy')) return;
+                    seleccionarJugador(n);
+                });
+                container.appendChild(tab);
+            });
+            // Attach clear handlers (delegation from container)
+            container.querySelectorAll('.tab-clear').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    limpiarJugador(btn.dataset.player);
+                });
+            });
+            container.querySelectorAll('.tab-buy').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pedirFichas(btn.dataset.player);
+                });
+            });
+        }
+
+        function seleccionarJugador(nombre) {
+            if (estaGirando) return;
+            activePlayer = nombre;
+            document.querySelectorAll('.player-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.player-tab[data-player="${nombre}"]`).classList.add('active');
+            actualizarUI();
+        }
+
+        // ==================== CHIP PLACEMENT ====================
+        function colocarFicha(numero) {
+            if (estaGirando) return;
+            initAudio();
+            const player = players[activePlayer];
+            if (player.balance < selectedDenom) {
+                mostrarMensaje('❌ Sin fichas', 'No te alcanza para apostar ×' + selectedDenom, 'efecto-perdedor');
+                const bar = document.getElementById('balanceBar');
+                bar.classList.add('insufficient');
+                setTimeout(() => bar.classList.remove('insufficient'), 1000);
+                return;
+            }
+            player.balance -= selectedDenom;
+            player.bets[numero] = (player.bets[numero] || 0) + selectedDenom;
+            emitirSonidoFicha();
+            actualizarUI();
+        }
+
+        function limpiarApuestas() {
+            if (estaGirando) return;
+            const player = players[activePlayer];
+            Object.keys(player.bets).forEach(num => {
+                player.balance += player.bets[num];
+            });
+            player.bets = {};
+            player.insolvente = false;
+            actualizarUI();
+            mostrarMensaje('🗑 Apuestas limpias', 'Fichas devueltas a ' + activePlayer, '');
+        }
+
+        function limpiarJugador(nombre) {
+            if (estaGirando) return;
+            const p = players[nombre];
+            Object.keys(p.bets).forEach(num => {
+                p.balance += p.bets[num];
+            });
+            p.bets = {};
+            p.insolvente = false;
+            actualizarUI();
+            mostrarMensaje('🗑 ' + nombre, 'Apuestas eliminadas', '');
+        }
+
+        function pedirFichas(nombre) {
+            if (estaGirando) return;
+            const p = players[nombre];
+            p.balance += 50;
+            p.pedidos = (p.pedidos || 0) + 1;
+            const totalApostado = Object.values(p.bets).reduce((a,b) => a+b, 0);
+            p.insolvente = totalApostado > 0 && p.balance < totalApostado;
+            actualizarUI();
+            mostrarMensaje('💰 ' + nombre, 'Compró 50 fichas (×' + p.pedidos + ')', '');
+        }
+
+        // ==================== SPIN ====================
         function girar() {
             if (estaGirando) return;
-
-            let apuestasActivas = [];
-            let hayError = false;
-
-            apuestasInputs.forEach(inputObj => {
-                let valStr = inputObj.el.value.trim();
-                if (valStr !== "") {
-                    let num = parseInt(valStr, 10);
-                    
-                    // Tratamiento de cifras que inician con 0 (Ej: "05" -> 5)
-                    if (!isNaN(num) && num >= 0 && num <= 36) {
-                        valStr = num.toString(); 
-                    }
-
-                    if (isNaN(num) || num < 0 || num > 36) {
-                        hayError = true;
-                        inputObj.el.parentElement.style.borderColor = "var(--accent-color)";
-                        setTimeout(() => inputObj.el.parentElement.style.borderColor = "transparent", 1500);
-                    } else {
-                        apuestasActivas.push({ nombre: inputObj.nombre, valor: valStr });
-                    }
-                }
+            let totalChips = 0;
+            NOMS_JUG.forEach(n => {
+                Object.values(players[n].bets).forEach(c => { totalChips += c; });
             });
-
-            if (hayError) {
-                mostrarMensaje("Error", "¡Usa números de 0 a 36!", "efecto-perdedor");
+            if (totalChips === 0) {
+                mostrarMensaje('Atención', '¡Alguien debe apostar primero!', 'efecto-perdedor');
                 return;
             }
-
-            if (apuestasActivas.length === 0) {
-                mostrarMensaje("Atención", "¡Al menos un jugador debe ingresar un número!", "efecto-perdedor");
+            const insolventes = NOMS_JUG.filter(n => players[n].insolvente);
+            if (insolventes.length > 0) {
+                mostrarMensaje('❌ Saldo insuficiente', insolventes.join(', ') + ' no pueden mantener apuestas. Compren fichas o limpien.', 'efecto-perdedor');
                 return;
             }
-
             initAudio();
             estaGirando = true;
-            mostrarMensaje("¡Suerte!", "Girando la ruleta...", "");
+            document.getElementById('spinBtn').disabled = true;
+            mostrarMensaje('¡Suerte!', 'Girando la ruleta...', '');
+            document.querySelector('.ruleta-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             const duracionTotal = 4500;
             const inicioTiempo = performance.now();
-            const vueltasBase = 8 * 360; 
+            const vueltasBase = 7 * 360;
             const extraGrados = Math.floor(Math.random() * 360);
             const rotacionObjetivo = currentRotation + vueltasBase + extraGrados;
             const rotacionInicial = currentRotation;
@@ -510,101 +765,178 @@
             function actualizarAnimacion(tiempoActual) {
                 const transcurrido = tiempoActual - inicioTiempo;
                 const t = Math.min(transcurrido / duracionTotal, 1);
-                const easing = 1 - Math.pow(1 - t, 4); // Parada fluida decrescente
-                
+                const easing = 1 - Math.pow(1 - t, 4);
                 currentRotation = rotacionInicial + (rotacionObjetivo - rotacionInicial) * easing;
-                canvas.style.transform = `rotate(${currentRotation}deg)`;
-                
+                canvas.style.transform = 'rotate(' + currentRotation + 'deg)';
                 const anguloPorSegmento = 360 / numSegmentos;
                 const segmentoActual = Math.floor(currentRotation / anguloPorSegmento);
-                
                 if (segmentoActual !== ultimoAnguloSegmento) {
                     emitirSonidoClic();
                     ultimoAnguloSegmento = segmentoActual;
                 }
-
                 if (t < 1) {
                     requestAnimationFrame(actualizarAnimacion);
                 } else {
-                    finalizarGiro(apuestasActivas);
+                    finalizarGiro();
                 }
             }
             requestAnimationFrame(actualizarAnimacion);
         }
-        
+
+        function finalizarGiro() {
+            estaGirando = false;
+            document.getElementById('spinBtn').disabled = false;
+            const gradosNormalizados = currentRotation % 360;
+            const anguloApuntado = (360 - gradosNormalizados + 270) % 360;
+            const indiceGanador = Math.floor(anguloApuntado / (360 / numSegmentos));
+            const ganador = opciones[indiceGanador];
+            const numGanador = parseInt(ganador.texto);
+            actualizarHistorial(ganador);
+
+            const linea1 = 'N°: ' + ganador.texto;
+            let ganaron = [];
+
+            NOMS_JUG.forEach(n => {
+                const p = players[n];
+                const apuesta = p.bets[numGanador];
+                if (apuesta && apuesta > 0) {
+                    const ganancia = apuesta * 36;
+                    p.balance += ganancia;
+                    ganaron.push({ nombre: n, fichas: apuesta, ganancia: ganancia });
+                }
+                // Marcar como insolvente si no alcanza el saldo
+                const totalApostado = Object.values(p.bets).reduce((a,b) => a+b, 0);
+                p.insolvente = totalApostado > 0 && p.balance < totalApostado;
+            });
+
+            const insolventes = NOMS_JUG.filter(n => players[n].insolvente);
+            if (insolventes.length > 0) {
+                const infoExtra = insolventes.join(', ') + ' no pueden mantener apuestas. Compren fichas o limpien.';
+                if (ganaron.length > 0) {
+                    const txt = ganaron.map(g => g.nombre + ' +' + g.ganancia + '!').join(' | ');
+                    mostrarMensaje(linea1, txt + ' | ' + infoExtra, 'efecto-ganador');
+                    emitirSonidoVictoria();
+                } else {
+                    mostrarMensaje(linea1, infoExtra, 'efecto-perdedor');
+                }
+            } else if (ganaron.length > 0) {
+                const txt = ganaron.map(g => g.nombre + ' +' + g.ganancia + ' fichas!').join(' | ');
+                mostrarMensaje(linea1, txt, 'efecto-ganador');
+                emitirSonidoVictoria();
+            } else {
+                mostrarMensaje(linea1, '¡Nadie acertó! Prueben de nuevo', 'efecto-perdedor');
+            }
+            actualizarUI();
+        }
+
+        // ==================== HISTORY ====================
         function actualizarHistorial(ganador) {
-            const item = document.createElement("div");
-            item.className = "historial-item";
+            const item = document.createElement('div');
+            item.className = 'historial-item';
             item.style.backgroundColor = ganador.color;
             item.textContent = ganador.texto;
             historyList.insertBefore(item, historyList.firstChild);
-            
-            // Limitador estricto corregido para almacenar exactamente los últimos 20 números
             if (historyList.children.length > 20) {
                 historyList.removeChild(historyList.lastChild);
             }
         }
 
+        // ==================== UI UPDATES ====================
         function mostrarMensaje(linea1, linea2, claseExtra) {
-            resultText.className = `resultado-texto ${claseExtra}`;
-            resultText.innerHTML = `
-                <span class="resultado-numero">${linea1}</span>
-                <span>${linea2}</span>
-            `;
+            resultText.className = 'resultado-texto ' + claseExtra;
+            resultText.innerHTML = '<span class="resultado-numero">' + linea1 + '</span><span>' + linea2 + '</span>';
         }
 
-        function finalizarGiro(apuestasActivas) {
-            estaGirando = false;
-            
-            const gradosNormalizados = currentRotation % 360;
-            const anguloApuntado = (360 - gradosNormalizados + 270) % 360;
-            const indiceGanador = Math.floor(anguloApuntado / (360 / numSegmentos));
-            const ganador = opciones[indiceGanador];
-            
-            actualizarHistorial(ganador);
-
-            // Filtrar quiénes ganaron
-            let ganadores = [];
-            apuestasActivas.forEach(apuesta => {
-                if (apuesta.valor === ganador.texto) {
-                    ganadores.push(apuesta.nombre);
+        function actualizarUI() {
+            const player = players[activePlayer];
+            document.getElementById('balanceDisplay').textContent = player.balance;
+            const warn = document.getElementById('chipWarning');
+            if (player.balance === 0) {
+                warn.textContent = '⚠️ No tiene saldo';
+                warn.style.display = 'inline';
+            } else if (player.balance < 5) {
+                warn.textContent = '⚠️ Quedan pocas';
+                warn.style.display = 'inline';
+            } else {
+                warn.style.display = 'none';
+            }
+            const totalBet = Object.values(player.bets).reduce((a,b) => a+b, 0);
+            document.getElementById('totalBetDisplay').textContent = activePlayer + ': ' + totalBet;
+            document.getElementById('clearBtn').textContent = '🗑 LIMPIAR ' + activePlayer;
+            document.querySelectorAll('.player-tab').forEach(t => {
+                const n = t.dataset.player;
+                const p = players[n];
+                const bal = document.getElementById('tabBal_' + n);
+                if (bal) bal.textContent = p.balance;
+                const clearBtn = document.getElementById('clearBtn_' + n);
+                if (clearBtn) {
+                    const hasBets = Object.keys(p.bets).length > 0;
+                    clearBtn.style.display = hasBets ? 'flex' : 'none';
+                }
+                const buyBtn = document.getElementById('buyBtn_' + n);
+                if (buyBtn) {
+                    const show = p.balance < 5 || p.insolvente;
+                    buyBtn.style.display = show ? 'inline-block' : 'none';
+                    buyBtn.textContent = '+50💰(×' + (p.pedidos || 0) + ')';
+                }
+                const betInfo = document.getElementById('tabBetInfo_' + n);
+                if (betInfo) {
+                    const tb = Object.values(p.bets).reduce((a,b) => a+b, 0);
+                    betInfo.textContent = 'Ap: ' + tb + ' | Sal: ' + p.balance;
+                    betInfo.style.display = n === activePlayer ? 'block' : 'none';
                 }
             });
-
-            const linea1 = `Número ganador: ${ganador.texto}`;
-
-            if (ganadores.length > 0) {
-                const textoGanadores = ganadores.join(", ");
-                mostrarMensaje(linea1, `ganaste!! (${textoGanadores})`, "efecto-ganador");
-                emitirSonidoVictoria();
-            } else {
-                mostrarMensaje(linea1, "pruebs de nuevo!", "efecto-perdedor");
-            }
+            actualizarTablero();
+            actualizarResumen();
         }
 
-        // 6. Vinculación Segura de Componentes
+        function actualizarResumen() {
+            const content = document.getElementById('betsSummaryContent');
+            let partes = [];
+            NOMS_JUG.forEach(n => {
+                const p = players[n];
+                const total = Object.values(p.bets).reduce((a,b) => a+b, 0);
+                if (total > 0) {
+                    const detalles = Object.entries(p.bets).map(([num, cnt]) => num + '(×' + cnt + ')').join(' ');
+                    partes.push('<span class="player-bet" style="color:' + COLORES_JUG[n] + '">' + n + ': ' + detalles + '</span>');
+                }
+            });
+            content.innerHTML = partes.length > 0 ? partes.join(' | ') : 'Nadie ha apostado aún';
+        }
+
+        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', function() {
-            canvas = document.getElementById("wheelCanvas");
-            ctx = canvas.getContext("2d");
-            resultText = document.getElementById("resultText");
-            historyList = document.getElementById("historyList");
+            canvas = document.getElementById('wheelCanvas');
+            ctx = canvas.getContext('2d');
+            resultText = document.getElementById('resultText');
+            historyList = document.getElementById('historyList');
 
-            // Matriz dinámica de referencias para soportar los 8 jugadores
-            apuestasInputs = [
-                { nombre: "J1", el: document.getElementById("apuestaJ1") },
-                { nombre: "J2", el: document.getElementById("apuestaJ2") },
-                { nombre: "J3", el: document.getElementById("apuestaJ3") },
-                { nombre: "J4", el: document.getElementById("apuestaJ4") },
-                { nombre: "J5", el: document.getElementById("apuestaJ5") },
-                { nombre: "J6", el: document.getElementById("apuestaJ6") },
-                { nombre: "J7", el: document.getElementById("apuestaJ7") },
-                { nombre: "J8", el: document.getElementById("apuestaJ8") }
-            ];
-
+            crearPestanas();
+            crearTablero();
             dibujarRuleta();
-            canvas.addEventListener("click", girar);
-        });
+            actualizarUI();
 
+            // Spin button
+            document.getElementById('spinBtn').addEventListener('click', girar);
+            canvas.addEventListener('click', girar);
+
+            // Clear button
+            document.getElementById('clearBtn').addEventListener('click', limpiarApuestas);
+
+            // Denomination buttons
+            document.querySelectorAll('.denom-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (estaGirando) return;
+                    document.querySelectorAll('.denom-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedDenom = parseInt(this.dataset.value);
+                });
+            });
+
+            // Init audio on first touch anywhere
+            document.addEventListener('click', initAudio, { once: true });
+            document.addEventListener('touchstart', initAudio, { once: true });
+        });
     })();
     </script>
 </body>
