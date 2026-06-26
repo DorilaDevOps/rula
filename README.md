@@ -4,7 +4,7 @@ Ruleta Europea multijugador con fichas, apuestas simultáneas y pagos 36x. Funci
 
 ## Características
 
-- **8 jugadores** con saldo individual (50 fichas iniciales)
+- **8 jugadores** con saldo individual (100 fichas iniciales)
 - **Ruleta real** con orden europeo (`0, 32, 15, 19, ...`) y colores correctos (rojo, negro, verde)
 - **Apuestas simultáneas** — todas las fichas de todos los jugadores se ven apiladas en el tablero al mismo tiempo
 - **Denominaciones**: ×1, ×5, ×10, ×25
@@ -24,9 +24,14 @@ Ruleta Europea multijugador con fichas, apuestas simultáneas y pagos 36x. Funci
 
 ### Estados especiales
 
-- **Saldo bajo** (< 5 fichas): aparece advertencia y botón `+50💰` para comprar fichas
-- **Saldo insuficiente** para mantener apuestas: el jugador queda bloqueado hasta que compre fichas o limpie sus apuestas
-- Cada jugador puede limpiar sus apuestas individualmente con el botón ✕ en su tab
+- **Saldo bajo** (< 15 fichas): aparece advertencia y se habilita un botón `COMPRAR 100` para *comprar fichas*
+- **Saldo insuficiente** para mantener apuestas: el jugador queda bloqueado hasta que compre fichas o limpie sus     apuestas.
+- **limpiar** Cada jugador puede limpiar sus apuestas individualmente con el botón ✕ en su tab ocon Boton *🪣Limpiar*.
+
+ ## Observaciones
+ 1. Al seleccionar su tab el Jugador, éste se colorea en su borde segun el color del jugador, al igual que sus fichas.
+ 2. se puede apreciar al seleccionar el tab del jugador su nombre, su saldo actual, lo apostado en esta vez.
+ 3. sobre el boton  *comprar* puede verse las veces que hizo uso de la compra de fichas.
 
 ## Requisitos
 
