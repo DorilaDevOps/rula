@@ -117,11 +117,11 @@
             justify-content: center;
         }
         .denom-btn {
-            flex: 1; max-width: 70px;
+            flex:2; max-width: 70px;
             padding: 8px 0; border: 2px solid var(--text-muted);
             border-radius: 8px; background: var(--surface-color);
             color: var(--text-color); font-size: clamp(0.85rem, 3vw, 1rem);
-            font-weight: bold; cursor: pointer;
+             cursor: pointer;
             transition: all 0.2s ease; touch-action: manipulation;
         }
         .denom-btn.active {
@@ -140,21 +140,23 @@
         }
         .player-tabs::-webkit-scrollbar { display: none; }
         .player-tab {
-            flex: 0 0 auto; padding: 6px 10px;
-            border-radius: 8px; border: 2px solid transparent;
+            flex: 2 0 auto; padding: 6px 10px;
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: flex-start; gap: .5rem;
+            border-radius: 8px; border: 1px solid transparent;
             background: var(--surface-color); cursor: pointer;
-            font-size: clamp(0.7rem, 2.5vw, 0.8rem); font-weight: bold;
-            display: flex; flex-direction: column; align-items: center; gap: 2px;
-            min-width: 52px; transition: all 0.2s ease;
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem); font-weight: lighter;
+            min-width: 72px; transition: all 0.2s ease;
             touch-action: manipulation;
             color: var(--text-color);
             position: relative;
+			
+            font-size: clamp(.8rem, 1.8vw, 2rem);
         }
         .player-tab .tab-name {
             font-size: clamp(0.65rem, 2.2vw, 0.75rem);
         }
         .player-tab .tab-balance {
-            font-size: clamp(0.6rem, 2vw, 0.7rem);
             opacity: 0.8;
         }
         .player-tab .tab-color-dot {
@@ -162,14 +164,15 @@
             display: inline-block;
         }
         .player-tab.active {
-            border-color: var(--gold-color);
+            border-color: var(--player-color);
             background: rgba(255,215,0,0.1);
         }
         .player-tab.active::after {
-            content: '👈'; font-size: 0.6rem;
+            content: '👈'; font-size: 1rem;
             position: absolute; top: -4px; right: -4px;
         }
         .player-tab:active { transform: scale(0.95); }
+		
         .tab-clear {
             position: absolute;
             top: -3px;
@@ -193,11 +196,10 @@
         }
         .tab-clear:active { transform: scale(0.85); }
         .tab-bet-info {
-            font-size: clamp(0.5rem, 1.8vw, 0.6rem);
             color: var(--gold-color);
         }
+		.tab-buy-section{flex-direction: column; align-items: center; gap:.3rem;padding:0 .5rem;}
         .tab-buy {
-            font-size: clamp(0.55rem, 1.8vw, 0.65rem);
             padding: 2px 6px;
             border-radius: 4px;
             border: 1px solid var(--primary-color);
@@ -208,6 +210,7 @@
             margin-top: 2px;
         }
         .tab-buy:active { transform: scale(0.93); }
+        .tab-buy:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
         /* BETTING GRID */
         .betting-grid-wrapper {
@@ -293,6 +296,7 @@
         .btn-clear {
             background: var(--surface-color); color: var(--text-muted);
             border: 1px solid var(--text-muted);
+            transition: all 0.2s ease;
         }
         .btn-clear:active { transform: scale(0.95); }
 
@@ -419,7 +423,7 @@
         </div>
 			<div class="balance-bar" id="balanceBar">
 				<span class="label">Fichas:</span>
-				<span class="amount" id="balanceDisplay">50</span>
+				<span class="amount" id="balanceDisplay">100</span>
 				<span class="chip-warning" id="chipWarning" style="display:none">⚠️ Quedan pocas</span>
 			</div>
         </div>
@@ -439,16 +443,17 @@
             <div class="historial-lista" id="historyList"></div>
         </div>
 
-        <div class="bets-summary" id="betsSummary">
-            <div class="title">Apuestas activas</div>
-            <div class="content" id="betsSummaryContent">Nadie ha apostado aún</div>
-        </div>
 		
         <div class="denom-bar" id="denomBar">
             <button class="denom-btn active" data-value="1">×1</button>
             <button class="denom-btn" data-value="5">×5</button>
             <button class="denom-btn" data-value="10">×10</button>
             <button class="denom-btn" data-value="25">×25</button>
+        </div>
+
+        <div class="bets-summary" id="betsSummary">
+            <div class="title">Apuestas activas</div>
+            <div class="content" id="betsSummaryContent">Nadie ha apostado aún</div>
         </div>
 
         <div class="player-tabs" id="playerTabs"></div>
@@ -462,7 +467,7 @@
         // ==================== CONFIG ====================
         const ORDEN_EUROPEO = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
         const ROJOS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
-        const COLORES_JUG = {J1:'#00e5ff',J2:'#ff9100',J3:'#69f0ae',J4:'#ffd740',J5:'#e040fb',J6:'#ff5252',J7:'#448aff',J8:'#b2ff59'};
+        const COLORES_JUG = {J1:'#ffd740',J2:'#e040fb',J3:'#69f0ae',J4:'#00e5ff',J5:'#ff9100',J6:'#ff5252',J7:'#448aff',J8:'#b2ff59'};
         const NOMS_JUG = ['J1','J2','J3','J4','J5','J6','J7','J8'];
         const TABLERO = [
             [1,2,3], [4,5,6], [7,8,9], [10,11,12],
@@ -473,7 +478,7 @@
 
         // ==================== STATE ====================
         let players = {};
-        NOMS_JUG.forEach(n => { players[n] = { balance: 50, bets: {}, pedidos: 0, insolvente: false }; });
+        NOMS_JUG.forEach(n => { players[n] = { balance: 100, bets: {}, pedidos: 0, insolvente: false, totalDeducido: 0 }; });
         let activePlayer = 'J1';
         let selectedDenom = 1;
         let canvas, ctx, resultText, historyList;
@@ -644,10 +649,13 @@
                 const hasBets = Object.keys(players[n].bets).length > 0;
                 tab.innerHTML = `
                     <span class="tab-name"><span class="tab-color-dot" style="background:${COLORES_JUG[n]}"></span> ${n}</span>
-                    <span class="tab-balance" id="tabBal_${n}">${players[n].balance}</span>
-                    <span class="tab-bet-info" id="tabBetInfo_${n}" style="display:none">Ap: 0 | Sal: ${players[n].balance}</span>
+                    <span class="tab-balance" id="tabBal_${n}">SALDO ${players[n].balance}</span>
+                    <span class="tab-bet-info" id="tabBetInfo_${n}" >Apuesta: 0 </span>
                     <button class="tab-clear" id="clearBtn_${n}" data-player="${n}" style="display:${hasBets ? 'flex' : 'none'}" aria-label="Limpiar ${n}">✕</button>
-                    <button class="tab-buy" id="buyBtn_${n}" data-player="${n}" style="display:none">+50💰(×0)</button>
+                    <section class="tab-buy-section" id="tabBuySection_${n}" style="display:flex;border:1px solid ${COLORES_JUG[n]}">
+                        <span class="tab-buy-info" id="tabBuyInfo_${n}" style="font-size:0.65rem; color:var(--text-muted); ">💰 ${players[n].pedidos}</span>
+                        <button class="tab-buy" id="buyBtn_${n}" data-player="${n}" >COMPRAR 100</button>
+                    </section>
                 `;
                 tab.addEventListener('click', (e) => {
                     if (e.target.closest('.tab-clear')) return;
@@ -676,6 +684,7 @@
             activePlayer = nombre;
             document.querySelectorAll('.player-tab').forEach(t => t.classList.remove('active'));
             document.querySelector(`.player-tab[data-player="${nombre}"]`).classList.add('active');
+            document.getElementById('clearBtn').style.borderColor = COLORES_JUG[nombre];
             actualizarUI();
         }
 
@@ -683,53 +692,52 @@
         function colocarFicha(numero) {
             if (estaGirando) return;
             initAudio();
-            const player = players[activePlayer];
-            if (player.balance < selectedDenom) {
-                mostrarMensaje('❌ Sin fichas', 'No te alcanza para apostar ×' + selectedDenom, 'efecto-perdedor');
-                const bar = document.getElementById('balanceBar');
-                bar.classList.add('insufficient');
-                setTimeout(() => bar.classList.remove('insufficient'), 1000);
-                return;
-            }
-            player.balance -= selectedDenom;
-            player.bets[numero] = (player.bets[numero] || 0) + selectedDenom;
-            emitirSonidoFicha();
-            actualizarUI();
+    const player = players[activePlayer];
+    if (player.balance < selectedDenom) {
+        mostrarMensaje('❌ Sin fichas', 'No te alcanza para apostar ×' + selectedDenom, 'efecto-perdedor');
+        const bar = document.getElementById('balanceBar');
+        bar.classList.add('insufficient');
+        setTimeout(() => bar.classList.remove('insufficient'), 1000);
+        return;
+    }
+    player.balance -= selectedDenom;
+    player.bets[numero] = (player.bets[numero] || 0) + selectedDenom;
+    player.totalDeducido += selectedDenom;
+    emitirSonidoFicha();
+    actualizarUI();
         }
 
         function limpiarApuestas() {
             if (estaGirando) return;
-            const player = players[activePlayer];
-            Object.keys(player.bets).forEach(num => {
-                player.balance += player.bets[num];
-            });
-            player.bets = {};
-            player.insolvente = false;
-            actualizarUI();
-            mostrarMensaje('🗑 Apuestas limpias', 'Fichas devueltas a ' + activePlayer, '');
+    const player = players[activePlayer];
+    player.balance += player.totalDeducido || 0;
+    player.bets = {};
+    player.insolvente = false;
+    player.totalDeducido = 0;
+    actualizarUI();
+    mostrarMensaje('🗑 Apuestas limpias', 'Fichas devueltas a ' + activePlayer, '');
         }
 
         function limpiarJugador(nombre) {
             if (estaGirando) return;
-            const p = players[nombre];
-            Object.keys(p.bets).forEach(num => {
-                p.balance += p.bets[num];
-            });
-            p.bets = {};
-            p.insolvente = false;
-            actualizarUI();
-            mostrarMensaje('🗑 ' + nombre, 'Apuestas eliminadas', '');
+    const p = players[nombre];
+    p.balance += p.totalDeducido || 0;
+    p.bets = {};
+    p.insolvente = false;
+    p.totalDeducido = 0;
+    actualizarUI();
+    mostrarMensaje('🗑 ' + nombre, 'Apuestas eliminadas', '');
         }
 
         function pedirFichas(nombre) {
             if (estaGirando) return;
             const p = players[nombre];
-            p.balance += 50;
+            p.balance += 100;
             p.pedidos = (p.pedidos || 0) + 1;
             const totalApostado = Object.values(p.bets).reduce((a,b) => a+b, 0);
             p.insolvente = totalApostado > 0 && p.balance < totalApostado;
             actualizarUI();
-            mostrarMensaje('💰 ' + nombre, 'Compró 50 fichas (×' + p.pedidos + ')', '');
+            mostrarMensaje('💰 ' + nombre, 'Compró 100 fichas (×' + p.pedidos + ')', '');
         }
 
         // ==================== SPIN ====================
@@ -743,11 +751,31 @@
                 mostrarMensaje('Atención', '¡Alguien debe apostar primero!', 'efecto-perdedor');
                 return;
             }
-            const insolventes = NOMS_JUG.filter(n => players[n].insolvente);
-            if (insolventes.length > 0) {
-                mostrarMensaje('❌ Saldo insuficiente', insolventes.join(', ') + ' no pueden mantener apuestas. Compren fichas o limpien.', 'efecto-perdedor');
+            const bloqueados = NOMS_JUG.filter(n => {
+                const p = players[n];
+                const total = Object.values(p.bets).reduce((a,b) => a+b, 0);
+                if (total === 0) return false;
+                const yaDeducido = p.totalDeducido || 0;
+                const porDeducir = total - yaDeducido;
+                return porDeducir > 0 && p.balance < porDeducir;
+            });
+            if (bloqueados.length > 0) {
+                mostrarMensaje('❌ Saldo insuficiente', bloqueados.join(', ') + ' no pueden mantener apuestas. Compren fichas o limpien.', 'efecto-perdedor');
                 return;
             }
+            NOMS_JUG.forEach(n => {
+                const p = players[n];
+                const total = Object.values(p.bets).reduce((a,b) => a+b, 0);
+                if (total > 0) {
+                    const yaDeducido = p.totalDeducido || 0;
+                    const porDeducir = total - yaDeducido;
+                    if (porDeducir > 0) {
+                        p.balance -= porDeducir;
+                    }
+                    p.totalDeducido = total;
+                }
+            });
+			
             initAudio();
             estaGirando = true;
             document.getElementById('spinBtn').disabled = true;
@@ -826,6 +854,7 @@
             } else {
                 mostrarMensaje(linea1, '¡Nadie acertó! Prueben de nuevo', 'efecto-perdedor');
             }
+            NOMS_JUG.forEach(n => { players[n].totalDeducido = 0; });
             actualizarUI();
         }
 
@@ -854,7 +883,7 @@
             if (player.balance === 0) {
                 warn.textContent = '⚠️ No tiene saldo';
                 warn.style.display = 'inline';
-            } else if (player.balance < 5) {
+            } else if (player.balance < 15) {
                 warn.textContent = '⚠️ Quedan pocas';
                 warn.style.display = 'inline';
             } else {
@@ -863,27 +892,33 @@
             const totalBet = Object.values(player.bets).reduce((a,b) => a+b, 0);
             document.getElementById('totalBetDisplay').textContent = activePlayer + ': ' + totalBet;
             document.getElementById('clearBtn').textContent = '🗑 LIMPIAR ' + activePlayer;
+            document.getElementById('clearBtn').style.borderColor = COLORES_JUG[activePlayer];
             document.querySelectorAll('.player-tab').forEach(t => {
                 const n = t.dataset.player;
                 const p = players[n];
                 const bal = document.getElementById('tabBal_' + n);
-                if (bal) bal.textContent = p.balance;
+                if (bal) bal.textContent = 'Saldo ' + p.balance;
                 const clearBtn = document.getElementById('clearBtn_' + n);
                 if (clearBtn) {
                     const hasBets = Object.keys(p.bets).length > 0;
                     clearBtn.style.display = hasBets ? 'flex' : 'none';
                 }
+                const buySection = document.getElementById('tabBuySection_' + n);
+                const buyInfo = document.getElementById('tabBuyInfo_' + n);
                 const buyBtn = document.getElementById('buyBtn_' + n);
                 if (buyBtn) {
-                    const show = p.balance < 5 || p.insolvente;
-                    buyBtn.style.display = show ? 'inline-block' : 'none';
-                    buyBtn.textContent = '+50💰(×' + (p.pedidos || 0) + ')';
+                    buySection.style.display = 'flex';
+                    buyInfo.style.display = 'inline-block';
+                    buyInfo.textContent = ' 💰 ' + (p.pedidos || 0);
+                    buyBtn.style.display = 'inline-block';
+                    buyBtn.disabled = p.balance >= 15;
+                    buyBtn.textContent = 'COMPRAR 100';
                 }
                 const betInfo = document.getElementById('tabBetInfo_' + n);
                 if (betInfo) {
                     const tb = Object.values(p.bets).reduce((a,b) => a+b, 0);
-                    betInfo.textContent = 'Ap: ' + tb + ' | Sal: ' + p.balance;
-                    betInfo.style.display = n === activePlayer ? 'block' : 'none';
+                    betInfo.textContent = 'Apuesta: ' + tb ;
+                    <!-- betInfo.style.display = n === activePlayer ? 'block' : 'none'; -->
                 }
             });
             actualizarTablero();
